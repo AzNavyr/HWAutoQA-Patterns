@@ -44,8 +44,8 @@ public class DataGenerator {
     public static String generatePhone(String locale) {
         // TODO: добавить логику для объявления переменной phone и задания её значения, для генерации можно
         // использовать Faker
-        String phone = faker.phoneNumber().phoneNumber().;
-//        String phone = faker.numerify("+7##########");
+//        String phone = faker.phoneNumber().phoneNumber();
+        String phone = faker.numerify("+7##########");
         return phone;
     }
 
