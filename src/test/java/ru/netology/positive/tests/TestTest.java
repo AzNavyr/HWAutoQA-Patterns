@@ -47,50 +47,15 @@ class TestTest {
         $("[data-test-id='phone'] input").setValue(validUser.getPhone());
         $("[data-test-id='agreement']").click();
         $$("button").find(exactText("Забронировать")).click();
-        $("[data-test-id='success-notification'] .notification__title").should(visible, Duration.ofSeconds(15));
-        $("[class='notification__content']")
-                .shouldHave(Condition.text("Встреча успешно запланирована на " + firstMeetingDate), Duration.ofSeconds(15));
+        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
+        $(".notification__content")
+                .shouldHave(Condition.text("Встреча успешно забронирована на " + firstMeetingDate), Duration.ofSeconds(15));
 
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
-        $("[data-test-id='date'] input").val(secondMeetingDate);
+        $x("//input[@type= 'tel']").setValue(secondMeetingDate);
         $$("button").find(exactText("Забронировать")).click();
-        $("[data-test-id='replan-notification'] .button").should(visible, Duration.ofSeconds(15)).click();
-        $("[class='notification__content']")
-                .shouldHave(Condition.text("Встреча успешно запланирована на " + secondMeetingDate), Duration.ofSeconds(15));
-    }
-
-    @Test
-    void shouldCorrectlyFilledOutForm() throws InterruptedException {
-        $("[data-test-id=city] .input__control").val("Симферополь");
-        String date = LocalDate.now().plusDays(5).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
-        Thread.sleep(2000);
-        $x("//input[@type= 'tel']").val(date);
-        $("[data-test-id=name] .input__control").val("Шувалов Дмитрий");
-        $("[data-test-id=\"phone\"] input").val("+79788885522");
-        $("[data-test-id='agreement']").click();
-        $$("[role=\"button\"]").find(exactText("Забронировать")).click();
         $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
         $(".notification__content")
-                .shouldHave(Condition.text("Встреча успешно забронирована на " +date))
-                .shouldBe(visible, Duration.ofSeconds(15));
+                .shouldHave(Condition.text("Встреча успешно забронирована на " + secondMeetingDate), Duration.ofSeconds(15));
     }
-
-    @Test
-    void shouldEnterHyphenatedName(){
-        $("[data-test-id=city] .input__control").val("Казань");
-        String date = LocalDate.now().plusDays(30).format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
-        $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
-        $x("//input[@type= 'tel']").val(date);
-        $("[data-test-id=name] .input__control").val("Шувалов Максим-Иван");
-        $("[data-test-id=\"phone\"] input").val("+79788885522");
-        $("[data-test-id='agreement']").click();
-        $$("[role=\"button\"]").find(Condition.exactText("Забронировать")).click();
-        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
-        $(".notification__content")
-                .shouldHave(Condition.text("Встреча успешно забронирована на " +date))
-                .shouldBe(visible, Duration.ofSeconds(15));
-    }
-
-
 }
