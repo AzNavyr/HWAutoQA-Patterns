@@ -2,10 +2,10 @@ package ru.netology.positive.tests;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.logevents.SelenideLogger;
 import com.github.javafaker.Faker;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import ru.netology.data.DataGenerator;
@@ -23,6 +23,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestTest {
     Faker fake = new Faker();
+
+    @BeforeAll
+    static void setUpAll(){
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
 
     @BeforeEach
     void setAll(){
@@ -57,5 +62,10 @@ class TestTest {
         $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(15));
         $(".notification__content")
                 .shouldHave(Condition.text("Встреча успешно забронирована на " + secondMeetingDate), Duration.ofSeconds(15));
+    }
+
+    @AfterAll
+    static void tearDown(){
+        SelenideLogger.removeListener("allure");
     }
 }
